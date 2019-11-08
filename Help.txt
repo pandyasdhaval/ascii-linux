@@ -1,0 +1,19 @@
+Player Symbol: @
+
+Move around using :
+	w -> UP
+	s -> DOWN
+	a -> LEFT
+	d -> RIGHT
+
+Walls: #########
+
+Free Space: ........
+
+Enemies:
+	D -> Dragon
+	G -> Goblin
+	O -> OGRE
+	S -> SNAKE
+
+Have Fun Playing!!!
