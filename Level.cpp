@@ -29,9 +29,9 @@ void Level::load(string levelFileName, Player &player, vector<Enemy> &enemy)
 	char tile;
 	Enemy bufferEnemy;
 
-	for (int i = 0; i < _lvlData.size(); i++)
+	for (unsigned int i = 0; i < _lvlData.size(); i++)
 	{
-		for (int j = 0; j < _lvlData[i].size(); j++)
+		for (unsigned int j = 0; j < _lvlData[i].size(); j++)
 		{
 			tile = _lvlData[i][j];
 			switch (tile)
@@ -89,19 +89,49 @@ void Level::load(string levelFileName, Player &player, vector<Enemy> &enemy)
 	}
 }
 
-void Level::print(Player &player)
+void Level::print(Player &player, WINDOW *aWindow)
 {
-	printf("Player Level: %d\n", player.getLVL());
-	printf("Player XP: %d\n", player.getXP());
-	for (int i = 0; i < _lvlData.size(); i++)
+	int row, col;
+	unsigned int height, width = 0;
+
+	height = _lvlData.size();
+
+	getmaxyx(aWindow, row, col);
+
+	for (unsigned int i = 0; i < _lvlData.size(); i++)
 	{
-		printf("%s", _lvlData[i].c_str());
-		printf("\n");
+		if(_lvlData[i].length() > width) {
+			width = _lvlData[i].length();
+		}
+	}
+	width++;
+
+	//wmove(aWindow, 0, 0);
+	printf("Row = %d, col = %d, height = %d, width = %d", row, col, height, width);
+	//wrefresh(aWindow);
+	//getch();
+	mvwprintw(aWindow, ((row-height)/2) - 3, ((col-width)/2) + 0,"Player Level: %d", player.getLVL());
+	mvwprintw(aWindow, ((row-height)/2) - 2 , ((col-width)/2) + 0,"Player XP: %d", player.getXP());
+	//printf("Player Level: %d\n", player.getLVL());
+	//printf("Player XP: %d\n", player.getXP());
+	for (unsigned int i = 0; i < _lvlData.size(); i++)
+	{
+		//mvwprintw(aWindow, ((row-height)/2) + i, ((col-width)/2) + 0,"%s", _lvlData[i].c_str());
+		mvwaddstr(aWindow, ((row-height)/2) + i, ((col-width)/2) + 0, _lvlData[i].c_str());
+		//printf("%s", _lvlData[i].c_str());
+		//printf("\n");
 	}
 	//printf("\n");
+	//mvwprintw(aWindow, 25, 80, "blablablablabla");
+	wrefresh(aWindow);
+	//getch();
+	//werase(aWindow);
+	//wclear(aWindow);
+	//wrefresh(aWindow);
+	//getch();
 }
 
-void Level::playerMove(Player &player, vector<Enemy> &enemy)
+void Level::playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow)
 {
 	static default_random_engine randomEngine(time(NULL));
 	uniform_int_distribution<int> attackRoll(0, player.getAttack());
@@ -109,14 +139,20 @@ void Level::playerMove(Player &player, vector<Enemy> &enemy)
 	int attack;
 	char command;
 	int isValid = 0;
-	char symbol = '.';
+	//char symbol = '.'; //unused variable 
 
+	int y, x;
+	getyx(aWindow, y, x);
 	while (!isValid)
 	{
-		cout << "Enter a move command (w/s/a/d/) : ";
+		mvwprintw(aWindow, y, x, "Move commands (w/s/a/d) ");
+		//cout << "Enter a move command (w/s/a/d/) : ";
+		
 		//command = _getch();
-        command = getchar();
+        //command = getchar();
         //command = getche();
+        //command = ungetc(command, stdin);
+        command = getch();
 		isValid = checkifValid(command, player);
 		cout << isValid << endl;;
 	}
@@ -330,18 +366,19 @@ bool Level::checkifValid(char command, Enemy &enemy)
 }
 int Level::getEnemy(int xPos, int yPos, vector<Enemy> &enemy)
 {
-	for (int i = 0; i < enemy.size(); i++)
+	for (unsigned int i = 0; i < enemy.size(); i++)
 	{
 		if (xPos == enemy[i].getxPos() && yPos == enemy[i].getyPos())
 		{
 			return i;
 		}
 	}
+    //TODO add a return value
 }
 
 void Level::enemyMove(Player &player, vector<Enemy> &enemy, bool &death)
 {
-	int i = 0;
+	unsigned int i = 0; //check for impact 
 	int canAttackValue;
 	int attack;
 	int nearPlayerValue;
@@ -519,12 +556,13 @@ int Level::nearPlayer(Enemy &enemy)
 		}
 		return 0;
 	}
+    return 0;//TODO change this so that enemy moves randomly and not just sit there idle
 }
 
 
 void Level::updateDistance(Player &player, vector<Enemy> &enemy)
 {
-	for (int i = 0; i < enemy.size(); i++)
+	for (unsigned int i = 0; i < enemy.size(); i++)
 	{
 		enemy[i].setxDis(player.getxPos() - enemy[i].getxPos());
 		enemy[i].setyDis(player.getyPos() - enemy[i].getyPos());

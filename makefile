@@ -3,8 +3,8 @@ CFLAGS=-Wall -c
 
 all: ansi
 
-ansi: main.o Enemy.o GameSystem.o Level.o Player.o
-	$(CC) main.o Enemy.o GameSystem.o Level.o Player.o -o ansi
+ansi: main.o Enemy.o GameSystem.o Level.o Player.o Graphics.o
+	$(CC) main.o Enemy.o GameSystem.o Level.o Player.o Graphics.o -o ansi -lncurses
 
 main.o: main.cpp GameSystem.h
 	$(CC) $(CFLAGS) main.cpp -o main.o
@@ -21,6 +21,8 @@ Level.o: Level.cpp Level.h
 Player.o: Player.cpp Player.h
 	$(CC) $(CFLAGS) Player.cpp -o Player.o
 
+Graphics.o: Graphics.cpp Graphics.h
+	$(CC) $(CFLAGS) Graphics.cpp -o Graphics.o
 clean:
 	rm *.o ./ansi
 
