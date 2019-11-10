@@ -1,6 +1,6 @@
 #include "Level.h"
 
-
+using namespace std;
 
 Level::Level()
 {
@@ -15,7 +15,8 @@ void Level::load(string levelFileName, Player &player, vector<Enemy> &enemy)
 	if (file.fail())
 	{
 		perror(levelFileName.c_str());
-		system("Pause");
+		//system("Pause");
+		getchar();
 		exit(1);
 	}
 
@@ -107,7 +108,7 @@ void Level::print(Player &player, WINDOW *aWindow)
 	width++;
 
 	//wmove(aWindow, 0, 0);
-	printf("Row = %d, col = %d, height = %d, width = %d", row, col, height, width);
+	//printf("Row = %d, col = %d, height = %d, width = %d", row, col, height, width);
 	//wrefresh(aWindow);
 	//getch();
 	mvwprintw(aWindow, ((row-height)/2) - 3, ((col-width)/2) + 0,"Player Level: %d", player.getLVL());
@@ -131,7 +132,7 @@ void Level::print(Player &player, WINDOW *aWindow)
 	//getch();
 }
 
-void Level::playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow)
+bool Level::playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow)
 {
 	static default_random_engine randomEngine(time(NULL));
 	uniform_int_distribution<int> attackRoll(0, player.getAttack());
@@ -139,11 +140,12 @@ void Level::playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow)
 	int attack;
 	char command;
 	int isValid = 0;
+	bool done = false;
 	//char symbol = '.'; //unused variable 
 
 	int y, x;
 	getyx(aWindow, y, x);
-	while (!isValid)
+	while (!isValid && !done)
 	{
 		mvwprintw(aWindow, y, x, "Move commands (w/s/a/d) ");
 		//cout << "Enter a move command (w/s/a/d/) : ";
@@ -152,13 +154,21 @@ void Level::playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow)
         //command = getchar();
         //command = getche();
         //command = ungetc(command, stdin);
+        halfdelay(5);
         command = getch();
-		isValid = checkifValid(command, player);
-		cout << isValid << endl;;
+        if(command != ERR) {
+        	isValid = checkifValid(command, player);
+			//cout << isValid << endl;;
+        } else if(command == ERR) {
+        	done = true;
+        }
+		
 	}
 
-	if (isValid == 1)
-	{
+	if(isValid == 3) {
+		return true;
+	} 
+	else if (isValid == 1) {
 		player.setXP(player.getXP() + 1);
 		switch (command)
 		{
@@ -182,10 +192,10 @@ void Level::playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow)
 			player.setyPos(player.getyPos() + 1);
 			_lvlData[player.getxPos()][player.getyPos()] = player.getSymbol();
 			break;
-		case 'q':
-			cout << "Exiting the game\n";
-			exit(1);
-			break;
+		// case 'q':
+		// 	//cout << "Exiting the game\n";
+		// 	exit(1);
+		// 	break;
 		default:
 				break;
 		};
@@ -252,6 +262,7 @@ void Level::playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow)
 		//cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 		//print(player);//To get the screen if the player makes a kill
 	}
+	return false;
 	
 }
 
@@ -308,10 +319,11 @@ int Level::checkifValid(char command, Player &player)
 		}
 		break;
 	case 'q':
-		return 1;
+	case 'Q':
+		return 3;
 		break;
 	default:
-		cout << "bad input!\n";
+		//cout << "bad input!\n";
 		return 0;
 		break;
 	}
@@ -374,6 +386,7 @@ int Level::getEnemy(int xPos, int yPos, vector<Enemy> &enemy)
 		}
 	}
     //TODO add a return value
+    return 0; //just place holder
 }
 
 void Level::enemyMove(Player &player, vector<Enemy> &enemy, bool &death)
@@ -402,12 +415,12 @@ void Level::enemyMove(Player &player, vector<Enemy> &enemy, bool &death)
 			
 			if (player.getHealth() - attack > 0)
 			{
-				cout << "Attack by " << enemy[i].getName()<< " of " << attack << endl;
+				//cout << "Attack by " << enemy[i].getName()<< " of " << attack << endl;
 				player.setHealth(player.getHealth() - attack);
 			}
 			else {
 				_lvlData[player.getxPos()][player.getyPos()] = 'X';
-				cout << "\nYou Died Fighting!\n";
+				//cout << "\nYou Died Fighting!\n";
 
 				death = true;
 			}

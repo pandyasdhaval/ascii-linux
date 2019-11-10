@@ -1,26 +1,35 @@
 #pragma once
 #include<string>
+#include<vector>
 #include "Level.h"
+#include "Entity.h"
 #include "Player.h"
+
 #include "Graphics.h"
-using namespace std;
+//using namespace std;
 class GameSystem
 {
 public:
 	GameSystem();
+
 	bool playGame();
+	void lvlLoad(int lvl);
+
+	int sizeNumFile();
 	void playerEnemyDist();
 
-	void addFileName(string fileName);
-	string getFileName(int lvl);
-	void lvlLoad(int lvl);
-	int sizeNumFile();
-
-	Graphics getGraphics();
-	WINDOW *getWindow();
-
-	void setWindow(WINDOW *aWindow);
+	
+	Graphics getGraphics();//TODO remove?
+	
 	void delWindow();
+
+	//Setters
+	void setWindow(WINDOW *aWindow);
+	void addFileName(string fileName);
+
+	//Getters
+	WINDOW *getWindow();
+	string getFileName(int lvl);
 
 private:
 	Level _level;

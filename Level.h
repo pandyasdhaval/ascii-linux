@@ -8,7 +8,9 @@
 #include<random>
 #include<termios.h>
 #include<stdio.h>
+#include "Entity.h"
 #include "Player.h"
+
 #include "Enemy.h"
 #include "Graphics.h"
 using namespace std;
@@ -20,7 +22,7 @@ public:
 	void load(string levelFileName, Player &player, vector<Enemy> &enemy);
 	void print(Player &player, WINDOW *aWindow);
 
-	void playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow);
+	bool playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow);
 	void enemyMove(Player &player, vector<Enemy> &enemy, bool &death);
 	int checkifValid(char command, Player &player);
 	bool checkifValid(char command, Enemy &enemy);

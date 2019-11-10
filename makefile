@@ -1,10 +1,10 @@
 CC=g++
 CFLAGS=-Wall -c
 
-all: ansi
+all: ascii
 
-ansi: main.o Enemy.o GameSystem.o Level.o Player.o Graphics.o
-	$(CC) main.o Enemy.o GameSystem.o Level.o Player.o Graphics.o -o ansi -lncurses
+ascii: main.o Enemy.o GameSystem.o Level.o Player.o Graphics.o Entity.o
+	$(CC) main.o Enemy.o GameSystem.o Level.o Player.o Graphics.o Entity.o -o ascii -lncurses
 
 main.o: main.cpp GameSystem.h
 	$(CC) $(CFLAGS) main.cpp -o main.o
@@ -23,8 +23,11 @@ Player.o: Player.cpp Player.h
 
 Graphics.o: Graphics.cpp Graphics.h
 	$(CC) $(CFLAGS) Graphics.cpp -o Graphics.o
+
+Entity.o: Entity.cpp Entity.h
+	$(CC) $(CFLAGS) Entity.cpp -o Entity.o
 clean:
-	rm *.o ./ansi
+	rm *.o ./ascii
 
 run: all
-	./ansi
+	./ascii
