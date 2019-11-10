@@ -3,8 +3,11 @@ CFLAGS=-Wall -c -Ilib
 
 all: ascii
 
-ascii: bin/main.o bin/Enemy.o bin/GameSystem.o bin/Level.o bin/Player.o bin/Graphics.o bin/Entity.o
+ascii: makebin bin/main.o bin/Enemy.o bin/GameSystem.o bin/Level.o bin/Player.o bin/Graphics.o bin/Entity.o
 	$(CC) bin/main.o bin/Enemy.o bin/GameSystem.o bin/Level.o bin/Player.o bin/Graphics.o bin/Entity.o -o ascii -lncurses
+
+makebin:
+	mkdir -p bin
 
 bin/main.o: src/main.cpp lib/GameSystem.h
 	$(CC) $(CFLAGS) src/main.cpp -o bin/main.o -lncurses
@@ -27,7 +30,7 @@ bin/Graphics.o: src/Graphics.cpp lib/Graphics.h
 bin/Entity.o: src/Entity.cpp lib/Entity.h
 	$(CC) $(CFLAGS) src/Entity.cpp -o bin/Entity.o -lncurses
 clean:
-	rm *.o ./ascii
+	rm bin/*.o ./ascii
 
 run: all
 	./ascii
