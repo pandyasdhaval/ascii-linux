@@ -89,7 +89,7 @@ int main()
 			break;
 		case '2':
 
-			help("Help.txt");
+			help("environment/Help.txt");
 			break;
 		case 'q':
 		case 'Q':

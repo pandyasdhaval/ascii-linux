@@ -4,8 +4,8 @@ using namespace std;
 
 GameSystem::GameSystem()
 {
-	addFileName("level1.txt");
-	addFileName("level2.txt");
+	addFileName("environment/level1.txt");
+	addFileName("environment/level2.txt");
 
 
 	int row, col;
@@ -103,6 +103,7 @@ bool GameSystem::playGame()
 
 				getchar();
 
+                note = _myGraphics.create_newwin_samecentre(20, 80, _myWindow);
 				noteString.push_back("RIP!");
 				noteString.push_back("You Died Fighting!");
 
