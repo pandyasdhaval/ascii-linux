@@ -15,7 +15,7 @@ void Level::load(string levelFileName, Player &player, vector<Enemy> &enemy)
 	if (file.fail())
 	{
 		perror(levelFileName.c_str());
-		//system("Pause");
+
 		getchar();
 		exit(1);
 	}
@@ -107,29 +107,16 @@ void Level::print(Player &player, WINDOW *aWindow)
 	}
 	width++;
 
-	//wmove(aWindow, 0, 0);
-	//printf("Row = %d, col = %d, height = %d, width = %d", row, col, height, width);
-	//wrefresh(aWindow);
-	//getch();
 	mvwprintw(aWindow, ((row-height)/2) - 3, ((col-width)/2) + 0,"Player Level: %d", player.getLVL());
 	mvwprintw(aWindow, ((row-height)/2) - 2 , ((col-width)/2) + 0,"Player XP: %d", player.getXP());
-	//printf("Player Level: %d\n", player.getLVL());
-	//printf("Player XP: %d\n", player.getXP());
+
 	for (unsigned int i = 0; i < _lvlData.size(); i++)
 	{
-		//mvwprintw(aWindow, ((row-height)/2) + i, ((col-width)/2) + 0,"%s", _lvlData[i].c_str());
+
 		mvwaddstr(aWindow, ((row-height)/2) + i, ((col-width)/2) + 0, _lvlData[i].c_str());
-		//printf("%s", _lvlData[i].c_str());
-		//printf("\n");
 	}
-	//printf("\n");
-	//mvwprintw(aWindow, 25, 80, "blablablablabla");
+
 	wrefresh(aWindow);
-	//getch();
-	//werase(aWindow);
-	//wclear(aWindow);
-	//wrefresh(aWindow);
-	//getch();
 }
 
 bool Level::playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow)
@@ -141,24 +128,18 @@ bool Level::playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow)
 	char command;
 	int isValid = 0;
 	bool done = false;
-	//char symbol = '.'; //unused variable 
+
 
 	int y, x;
 	getyx(aWindow, y, x);
 	while (!isValid && !done)
 	{
 		mvwprintw(aWindow, y, x, "Move commands (w/s/a/d) ");
-		//cout << "Enter a move command (w/s/a/d/) : ";
-		
-		//command = _getch();
-        //command = getchar();
-        //command = getche();
-        //command = ungetc(command, stdin);
+
         halfdelay(5);
         command = getch();
         if(command != ERR) {
         	isValid = checkifValid(command, player);
-			//cout << isValid << endl;;
         } else if(command == ERR) {
         	done = true;
         }
@@ -192,10 +173,6 @@ bool Level::playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow)
 			player.setyPos(player.getyPos() + 1);
 			_lvlData[player.getxPos()][player.getyPos()] = player.getSymbol();
 			break;
-		// case 'q':
-		// 	//cout << "Exiting the game\n";
-		// 	exit(1);
-		// 	break;
 		default:
 				break;
 		};
@@ -259,11 +236,8 @@ bool Level::playerMove(Player &player, vector<Enemy> &enemy, WINDOW *aWindow)
 		default:
 			break;
 		};
-		//cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-		//print(player);//To get the screen if the player makes a kill
 	}
-	return false;
-	
+	return false;	
 }
 
 int Level::checkifValid(char command, Player &player)
@@ -323,7 +297,6 @@ int Level::checkifValid(char command, Player &player)
 		return 3;
 		break;
 	default:
-		//cout << "bad input!\n";
 		return 0;
 		break;
 	}
@@ -385,7 +358,6 @@ int Level::getEnemy(int xPos, int yPos, vector<Enemy> &enemy)
 			return i;
 		}
 	}
-    //TODO add a return value
     return 0; //just place holder
 }
 
@@ -408,25 +380,23 @@ void Level::enemyMove(Player &player, vector<Enemy> &enemy, bool &death)
 		canAttackValue = canAttack(enemy[i]);
 		nearPlayerValue = nearPlayer(enemy[i]);
 		
-		//cout << canAttackValue << endl;//TEST CASE
+
 		if (canAttackValue > 0)
 		{			
 			attack = attackRoll(randomEngine);
 			
 			if (player.getHealth() - attack > 0)
 			{
-				//cout << "Attack by " << enemy[i].getName()<< " of " << attack << endl;
 				player.setHealth(player.getHealth() - attack);
 			}
 			else {
 				_lvlData[player.getxPos()][player.getyPos()] = 'X';
-				//cout << "\nYou Died Fighting!\n";
 
 				death = true;
 			}
 		}
 		else if (nearPlayerValue > 0) {
-			//cout << nearPlayerValue << endl;//TEST
+
 			switch (nearPlayerValue)
 			{
 			case 1:
@@ -511,11 +481,7 @@ void Level::enemyMove(Player &player, vector<Enemy> &enemy, bool &death)
 int  Level::canAttack(Enemy &enemy)
 {
 	//keep diagonals in mind
-	//if (abs(enemy.getxDis()) == 1 && abs(enemy.getyDis()) == 1)
-	//{
-	//	return 0;
-	//}
-	//cout << enemy.getName()<<"\t"<<enemy.getxDis()<<"\t"<<enemy.getyDis() << endl;//TEST CASE
+
 	if (enemy.getxDis() == -1 && enemy.getyDis() == 0)//w
 	{
 		return 1;

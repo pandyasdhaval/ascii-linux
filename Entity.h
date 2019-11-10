@@ -1,12 +1,6 @@
-//#pragma once
 #ifndef _ENTITY_
 #define _ENTITY_
 
-
-//#include "Player.h"
-//using namespace std;
-
-//class Player;
 class Entity {
 
 public:

@@ -2,7 +2,7 @@ To compile: run 'make' command
 To run: run 'make run' command
 
 
-Version 2.20
+Version 2.30
 
 Comments:
     Fixed exit logic -> now all the windows are also deleted before exiting

@@ -4,8 +4,6 @@
 
 using namespace std;
 
-//class Player;
-
 Entity::Entity() {
 
 }
